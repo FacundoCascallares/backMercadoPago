@@ -3,7 +3,10 @@ Django settings for backend project.
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -160,12 +163,10 @@ DEFAULT_FROM_EMAIL = 'Equipo de TravelDreams <noreply@dreamtravel.com>'
 
 # Mercado Pago
 MERCADOPAGO_ACCESS_TOKEN = os.getenv(
-    "MP_ACCESS_TOKEN", 
-    "APP_USR-6112707204413529-051922-88ebe4c9479cd3495fbb9a6734499bbf-174672931"
+    "MP_ACCESS_TOKEN"
 )
 MERCADOPAGO_PUBLIC_KEY = os.getenv(
-    "MP_PUBLIC_KEY",
-    "APP_USR-14983d03-9340-4815-ac9b-3ade487b5510"
+    "MP_PUBLIC_KEY"
 )
 
 # PythonAnywhere domain overrides
