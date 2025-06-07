@@ -81,19 +81,29 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField() # El usuario ingresa su email aquí
     password = serializers.CharField()
 
     def validate(self, attrs):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        # Autenticación basada en email
-        user = authenticate(username=email, password=password)
+        # *** ¡CAMBIO CRÍTICO AQUÍ! ***
+        # Pasamos el 'email' que el usuario ingresó como si fuera el 'username'
+        # porque así es como lo guardamos en el RegisterSerializer.
+        user = authenticate(request=self.context.get('request'), username=email, password=password)
+        
         if not user:
+            # Si el usuario no se puede autenticar, las credenciales son inválidas
             raise serializers.ValidationError('Credenciales inválidas')
+        
+        # Opcional pero recomendado: Asegúrate de que el usuario esté activo
+        if not user.is_active:
+            raise serializers.ValidationError('Cuenta inactiva.')
+
         attrs['user'] = user
         return attrs
+    
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
